@@ -1,0 +1,202 @@
+{
+  "InterfaceAlias": "AUTO",
+  "BaseNetwork": "198.51.100.0/24",
+  "Hosts": [
+    {
+      "Name": "Gateway-001",
+      "IpAddress": "198.51.100.1",
+      "Enabled": true,
+      "Ports": [
+        {
+          "Proto": 0,
+          "Port": 21,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "220 FTP Server Ready"
+        },
+        {
+          "Proto": 0,
+          "Port": 22,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "SSH-2.0-OpenSSH_8.2p1 Ubuntu-4ubuntu0.1"
+        },
+        {
+          "Proto": 0,
+          "Port": 80,
+          "Mode": 1,
+          "DelayMs": 0,
+          "Response": "Welcome to LIHT Static Page"
+        },
+        {
+          "Proto": 0,
+          "Port": 554,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "RTSP/1.0 200 OK"
+        },
+        {
+          "Proto": 0,
+          "Port": 8080,
+          "Mode": 1,
+          "DelayMs": 0,
+          "Response": "8080 Service Ready"
+        },
+        {
+          "Proto": 0,
+          "Port": 3389,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "RDP Service Ready"
+        }
+      ]
+    },
+    {
+      "Name": "Host-002",
+      "IpAddress": "198.51.100.2",
+      "Enabled": true,
+      "Ports": [
+        {
+          "Proto": 0,
+          "Port": 21,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "220 FTP Server Ready"
+        },
+        {
+          "Proto": 0,
+          "Port": 22,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "SSH-2.0-OpenSSH_8.2p1 Ubuntu-4ubuntu0.1"
+        },
+        {
+          "Proto": 0,
+          "Port": 80,
+          "Mode": 1,
+          "DelayMs": 0,
+          "Response": "Welcome to LIHT Static Page"
+        },
+        {
+          "Proto": 0,
+          "Port": 3389,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "RDP Service Ready"
+        }
+      ]
+    },
+    {
+      "Name": "Host-003",
+      "IpAddress": "198.51.100.3",
+      "Enabled": true,
+      "Ports": [
+        {
+          "Proto": 0,
+          "Port": 80,
+          "Mode": 1,
+          "DelayMs": 0,
+          "Response": "Welcome to LIHT Static Page"
+        },
+        {
+          "Proto": 0,
+          "Port": 3389,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "RDP Service Ready"
+        }
+      ]
+    },
+    {
+      "Name": "Host-004",
+      "IpAddress": "198.51.100.4",
+      "Enabled": true,
+      "Ports": [
+        {
+          "Proto": 0,
+          "Port": 80,
+          "Mode": 1,
+          "DelayMs": 0,
+          "Response": "Welcome to LIHT Static Page"
+        },
+        {
+          "Proto": 0,
+          "Port": 3389,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "RDP Service Ready"
+        }
+      ]
+    },
+    {
+      "Name": "Host-005",
+      "IpAddress": "198.51.100.5",
+      "Enabled": true,
+      "Ports": [
+        {
+          "Proto": 0,
+          "Port": 80,
+          "Mode": 1,
+          "DelayMs": 0,
+          "Response": "Welcome to LIHT Static Page"
+        },
+        {
+          "Proto": 0,
+          "Port": 3389,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "RDP Service Ready"
+        }
+      ]
+    },
+    {
+      "Name": "Host-006",
+      "IpAddress": "198.51.100.6",
+      "Enabled": true,
+      "Ports": [
+        {
+          "Proto": 0,
+          "Port": 21,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "220 FTP Server Ready"
+        },
+        {
+          "Proto": 0,
+          "Port": 22,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "SSH-2.0-OpenSSH_8.2p1 Ubuntu-4ubuntu0.1"
+        },
+        {
+          "Proto": 0,
+          "Port": 80,
+          "Mode": 1,
+          "DelayMs": 0,
+          "Response": "Welcome to LIHT Static Page"
+        },
+        {
+          "Proto": 0,
+          "Port": 554,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "RTSP/1.0 200 OK"
+        },
+        {
+          "Proto": 0,
+          "Port": 8080,
+          "Mode": 1,
+          "DelayMs": 0,
+          "Response": "8080 Service Ready"
+        },
+        {
+          "Proto": 0,
+          "Port": 3389,
+          "Mode": 0,
+          "DelayMs": 0,
+          "Response": "RDP Service Ready"
+        }
+      ]
+    }
+  ]
+}
