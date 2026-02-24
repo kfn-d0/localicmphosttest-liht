@@ -3,7 +3,7 @@
 O programa é uma ferramenta de simulação de rede projetada para desenvolvedores e administradores de sistemas. 
 Ele permite simular um laboratório de rede com alguns endereços IPs e comportamentos de porta configuráveis em uma máquina Windows, utilizando um Switch Interno dedicado do Hyper-V para isolamento total.
 
-<img width="943" height="506" alt="image" src="https://github.com/user-attachments/assets/c7a0f1c3-6906-4bcb-af31-828a48fa95ec" />
+<img width="1920" height="1036" alt="image" src="https://github.com/user-attachments/assets/0d5325d5-6671-4e1d-bed5-f0e7aad8da2d" />
 
 ---
 
