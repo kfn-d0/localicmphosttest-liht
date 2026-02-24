@@ -37,27 +37,6 @@ Ele permite simular um laboratório de rede com alguns endereços IPs e comporta
 
 ---
 
-## Configuração (`config.json`)
-
-```json
-{
-  "InterfaceAlias": "AUTO",
-  "BaseNetwork": "198.51.100.0/24",
-  "Hosts": [
-    {
-      "Name": "Gateway-001",
-      "IpAddress": "198.51.100.1",
-      "Enabled": true,
-      "Ports": [
-        { "Port": 3389, "Mode": "Banner", "Response": "RDP Service Ready" }
-      ]
-    }
-  ]
-}
-```
-
----
-
 ## Como Usar
 
 1. **Abra como Administrador**: Clique com o botão direito em `LIHT.exe` → **Executar como Administrador**.
