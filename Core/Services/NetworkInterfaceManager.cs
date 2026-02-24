@@ -11,6 +11,8 @@ namespace FakeHostLocalLab.Core.Services;
 
 public static class NetworkInterfaceManager
 {
+    // Prevents concurrent SyncIps / RemoveAllIps calls from racing each other.
+    private static readonly SemaphoreSlim _syncLock = new SemaphoreSlim(1, 1);
     private const string LabSwitchName = "LIHT-Net";
 
     public static string EnsureLabInterfaceExists()
@@ -53,21 +55,26 @@ public static class NetworkInterfaceManager
 
     public static void RemoveAllIps(AppConfig config)
     {
-        var alias = GetExistingAlias();
-        if (string.IsNullOrEmpty(alias))
+        _syncLock.Wait();
+        try
         {
-            LogBus.Log("No LIHT-Net adapter found. Nothing to clean.");
-            return;
-        }
+            var alias = GetExistingAlias();
+            if (string.IsNullOrEmpty(alias))
+            {
+                LogBus.Log("No LIHT-Net adapter found. Nothing to clean.");
+                return;
+            }
 
-        var baseIpPart = ExtractBaseIpPart(config.BaseNetwork);
-        var currentIps = GetCurrentIps(alias, baseIpPart);
+            var baseIpPart = ExtractBaseIpPart(config.BaseNetwork);
+            var currentIps = GetCurrentIps(alias, baseIpPart);
 
-        foreach (var ip in currentIps)
-        {
-            LogBus.Log($"Removing IP {ip} from {alias}...");
-            RunPowerShell($"Remove-NetIPAddress -InterfaceAlias '{alias}' -IPAddress '{ip}' -Confirm:$false");
+            foreach (var ip in currentIps)
+            {
+                LogBus.Log($"Removing IP {ip} from {alias}...");
+                RunPowerShell($"Remove-NetIPAddress -InterfaceAlias '{alias}' -IPAddress '{ip}' -Confirm:$false -ErrorAction SilentlyContinue");
+            }
         }
+        finally { _syncLock.Release(); }
     }
 
     public static void RemoveLabSwitch()
@@ -86,41 +93,46 @@ public static class NetworkInterfaceManager
 
     public static void SyncIps(AppConfig config)
     {
-        int prefixLength = ExtractPrefixLength(config.BaseNetwork);
-        var alias = EnsureLabInterfaceExists();
-
-        if (string.IsNullOrEmpty(alias)) return;
-
-        var baseIpPart = ExtractBaseIpPart(config.BaseNetwork);
-        var currentIps = GetCurrentIps(alias, baseIpPart);
-        
-        var desiredIps = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        
-
-        desiredIps.Add(baseIpPart + "1");
-        
-        foreach (var host in config.Hosts)
+        _syncLock.Wait();
+        try
         {
-            if (host.Enabled) desiredIps.Add(host.IpAddress);
-        }
+            int prefixLength = ExtractPrefixLength(config.BaseNetwork);
+            var alias = EnsureLabInterfaceExists();
 
-        foreach (var ip in currentIps)
-        {
-            if (!desiredIps.Contains(ip))
+            if (string.IsNullOrEmpty(alias)) return;
+
+            var baseIpPart = ExtractBaseIpPart(config.BaseNetwork);
+            var currentIps = GetCurrentIps(alias, baseIpPart);
+
+            var desiredIps = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            desiredIps.Add(baseIpPart + "1");
+
+            foreach (var host in config.Hosts)
             {
-                LogBus.Log($"Cleaning up IP {ip}...");
-                RunPowerShell($"Remove-NetIPAddress -InterfaceAlias '{alias}' -IPAddress '{ip}' -Confirm:$false");
+                if (host.Enabled) desiredIps.Add(host.IpAddress);
+            }
+
+            // Remove IPs that are no longer desired
+            foreach (var ip in currentIps)
+            {
+                if (!desiredIps.Contains(ip))
+                {
+                    LogBus.Log($"Cleaning up IP {ip}...");
+                    RunPowerShell($"Remove-NetIPAddress -InterfaceAlias '{alias}' -IPAddress '{ip}' -Confirm:$false -ErrorAction SilentlyContinue");
+                }
+            }
+
+            // Add IPs that are missing
+            foreach (var ip in desiredIps)
+            {
+                if (!currentIps.Contains(ip))
+                {
+                    LogBus.Log($"Sync: Adding IP {ip} to {alias}...");
+                    RunPowerShell($"New-NetIPAddress -InterfaceAlias '{alias}' -IPAddress '{ip}' -PrefixLength {prefixLength} -Confirm:$false -ErrorAction SilentlyContinue");
+                }
             }
         }
-
-        foreach (var ip in desiredIps)
-        {
-            if (!currentIps.Contains(ip))
-            {
-                LogBus.Log($"Sync: Adding IP {ip} to {alias}...");
-                RunPowerShell($"New-NetIPAddress -InterfaceAlias '{alias}' -IPAddress '{ip}' -PrefixLength {prefixLength} -Confirm:$false");
-            }
-        }
+        finally { _syncLock.Release(); }
     }
 
     private static HashSet<string> GetCurrentIps(string alias, string baseIpPart)
